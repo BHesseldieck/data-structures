@@ -45,7 +45,6 @@ var LinkedList = function() {
       return false;
     };
 
-    console.log(searchNodes(list.head));
 
     var result = searchNodes(list.head);
     return result;
