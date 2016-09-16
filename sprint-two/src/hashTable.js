@@ -1,14 +1,15 @@
-var HashTable = function() {
-  this._limit = 8;
+var HashTable = function(limit) {
+  this._limit = limit || 8;
   this._counter = 0;
   this._storage = LimitedArray(this._limit);
 };
 
 HashTable.prototype.insert = function(k, v) {
-  
+  if (this._counter >= this._limit * .75) {
+    // need to call rehash, which creates a new hash table with a doubled limit
+    this.rehash();
+  }
 
-
-  
   var index = getIndexBelowMaxForKey(k, this._limit);
   var increment = true;
 
@@ -33,7 +34,6 @@ HashTable.prototype.insert = function(k, v) {
 
 
   increment ? this._counter++ : null;
-  console.log(this._counter);
 
   this._storage.set(index, array || [[k, v]]);
 };
@@ -58,12 +58,46 @@ HashTable.prototype.retrieveIndex = function(k) {
 };
 
 HashTable.prototype.remove = function(k) {
+  if (this._counter <= this._limit * .25) {
+    // need to call rehash, which creates a new hash table with a halved limit
+    this.rehash();
+  }
+
   var index = getIndexBelowMaxForKey(k, this._limit);
   this._storage.each((ele, ind, arr) => {
     if (ind === index) {
       arr[index] = undefined;
     }
   });
+  this._counter--;
+};
+
+HashTable.prototype.rehash = function () {
+  var newLimit;
+
+  if (this._counter >= this._limit * .75) {
+    newLimit = this._limit * 2;
+  } else if (this._counter <= this._limit * .25) {
+    newLimit = this._limit / 2;
+  }
+  console.log(newLimit, "newLimit")
+  this._limit = newLimit;
+
+  var tempStorage = this._storage;
+
+  this._storage = LimitedArray(newLimit);
+
+
+  tempStorage.each(item => {
+    
+    if (item !== undefined) {
+      item.forEach(pair => {
+        this.insert(pair[0], pair[1]);
+      });
+    }
+
+  });
+  
 };
 
 
