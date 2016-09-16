@@ -37,7 +37,6 @@ var LimitedArray = function(limit) {
     storage.forEach(function(item) {
       count++;
     });
-    console.log(count, "count", storage)
     return count;
 
   };
