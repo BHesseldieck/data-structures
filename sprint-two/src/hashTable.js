@@ -1,14 +1,12 @@
-var HashTable = function(limit) {
-  this._limit = limit || 8;
+var HashTable = function() {
+  this._limit = 8;
   this._counter = 0;
   this._storage = LimitedArray(this._limit);
 };
 
-HashTable.prototype.insert = function(k, v) {
-  if (this._counter >= this._limit * .75) {
-    // need to call rehash, which creates a new hash table with a doubled limit
-    this.rehash();
-  }
+HashTable.prototype.insert = function(k, v, reHashing) {
+
+  this.rehash(reHashing);
 
   var index = getIndexBelowMaxForKey(k, this._limit);
   var increment = true;
@@ -58,45 +56,54 @@ HashTable.prototype.retrieveIndex = function(k) {
 };
 
 HashTable.prototype.remove = function(k) {
-  if (this._counter <= this._limit * .25) {
-    // need to call rehash, which creates a new hash table with a halved limit
-    this.rehash();
-  }
-
+  
   var index = getIndexBelowMaxForKey(k, this._limit);
   this._storage.each((ele, ind, arr) => {
     if (ind === index) {
-      arr[index] = undefined;
+      delete arr[index];
     }
   });
   this._counter--;
+  this.rehash();
 };
 
-HashTable.prototype.rehash = function () {
-  var newLimit;
-
-  if (this._counter >= this._limit * .75) {
-    newLimit = this._limit * 2;
-  } else if (this._counter <= this._limit * .25) {
-    newLimit = this._limit / 2;
-  }
-  console.log(newLimit, "newLimit")
-  this._limit = newLimit;
-
-  var tempStorage = this._storage;
-
-  this._storage = LimitedArray(newLimit);
-
-
-  tempStorage.each(item => {
-    
-    if (item !== undefined) {
-      item.forEach(pair => {
-        this.insert(pair[0], pair[1]);
-      });
+HashTable.prototype.rehash = function (reHashing) {
+  var newLimit = undefined;
+  if (reHashing === undefined) {
+    if (this._counter >= this._limit * .75) {
+      newLimit = this._limit * 2;
+    } else if (this._counter <= this._limit * .25 && this._limit > 8) {
+      newLimit = this._limit / 2;
     }
+  }
 
-  });
+
+  if (newLimit !== undefined) {
+    // console.log("im reHashing");
+    this._counter = 0;
+    this._limit = newLimit;
+
+
+    var tempStorage = this._storage;
+
+    this._storage = LimitedArray(newLimit);
+
+    tempStorage.each((item, i, a) => {
+      // console.log(a, i, "im old");
+
+      if (item !== undefined) {
+        item.forEach(pair => {
+          this.insert(pair[0], pair[1], true);
+        });
+      }
+    });
+
+    // this._storage.each((e, i, arr) => {
+    //   console.log(arr, i, "im new");
+    // })
+    
+  }
+
   
 };
 
