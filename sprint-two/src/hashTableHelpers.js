@@ -1,3 +1,4 @@
+
 /*
  ********** NOTE: **********
  * Do not edit this code unless you see a bug!
@@ -15,40 +16,31 @@ var LimitedArray = function(limit) {
   var storage = [];
 
   var limitedArray = {};
-  limitedArray.get = function(index, key) {
-    return storage[index][key];
+  limitedArray.get = function(index) {
+    checkLimit(index);
+    return storage[index];
   };
-
-
-  limitedArray.set = function(index, value, key) {
-    storage[index] = storage[index] || {};
-    storage[index][key] = value; // Collision Handling should be reviewed
+  limitedArray.set = function(index, value) {
+    checkLimit(index);
+    storage[index] = value;
   };
-
-
   limitedArray.each = function(callback) {
     for (var i = 0; i < storage.length; i++) {
       callback(storage[i], i, storage);
     }
   };
 
-  limitedArray.getTableLength = function() {
-    var count = 0;
-    storage.forEach(function(item) {
-      count++;
-    });
-    return count;
-
+  var checkLimit = function(index) {
+    if (typeof index !== 'number') {
+      throw new Error('setter requires a numeric index for its first argument');
+    }
+    if (limit <= index) {
+      throw new Error('Error trying to access an over-the-limit index');
+    }
   };
 
   return limitedArray;
-
-  
-
 };
-
-
-
 
 // This is a "hashing function". You don't need to worry about it, just use it
 // to turn any string into an integer that is well-distributed between the
