@@ -72,7 +72,7 @@ Graph.prototype.shortestDistance = function(fromNode, target) {
       } else if (visited.includes(subNode) === false) {
         // debugger;
         graph.storage[subNode].forEach(function(child) {
-          console.log(child, 'child');
+          // console.log(child, 'child');
           visited.push(child);
           search(child, distance += 1);
         }); 
@@ -82,7 +82,7 @@ Graph.prototype.shortestDistance = function(fromNode, target) {
 
     nodeArr.forEach(function(element) {
       
-      console.log(element, 'element', visited, 'visited', path);
+      // console.log(element, 'element', visited, 'visited', path);
       search(element);
       visited = [fromNode];
     });

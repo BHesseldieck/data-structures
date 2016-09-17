@@ -85,7 +85,6 @@ describe('graph', function() {
     graph.addEdge(5, 4);
     graph.addEdge(4, 6);
     graph.addEdge(4, 2);
-    console.log(graph);
     expect(graph.shortestDistance(2, 5)).to.equal(2);
   });
 });
