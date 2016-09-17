@@ -37,6 +37,20 @@ treeMethods.contains = function(target) {
 };
 
 
+treeMethods.each = function(callback) {
+
+  var eachNode = function eachNode(node) {
+    if (node.value !== undefined) {
+      callback(node);
+    }
+    node.children.forEach( child => {
+      eachNode(child);
+    });
+  };
+
+  eachNode(this);
+};
+
 
 /*
  * Complexity: What is the time complexity of the above functions?

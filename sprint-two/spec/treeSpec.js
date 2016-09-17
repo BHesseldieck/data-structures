@@ -41,4 +41,17 @@ describe('tree', function() {
     expect(tree.contains(8)).to.equal(true);
   });
 
+  it('should execute a callback on each child', function() {
+    var result = [];
+    var test = function(node) {
+      result.push(node.value);
+    };
+    tree.addChild(5);
+    tree.addChild(6);
+    tree.children[0].addChild(7);
+    tree.children[1].addChild(8);
+    tree.each(test);
+    expect(result).to.eql([5, 7, 6, 8]);
+  });
+
 });

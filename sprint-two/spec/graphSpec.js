@@ -67,5 +67,25 @@ describe('graph', function() {
     expect(graph.hasEdge(1, 5)).to.equal(true);
     expect(graph.hasEdge(3, 5)).to.equal(true);
     expect(graph.hasEdge(5, 5)).to.equal(true);
+
+    
+
+  });
+
+  it('should return the shortest Path between two nodes', function() {
+    graph.addNode(5);
+    graph.addNode(2);
+    graph.addNode(1);
+    graph.addNode(3);
+    graph.addNode(4);
+    graph.addNode(6);
+    graph.addEdge(5, 3);
+    graph.addEdge(3, 1);
+    graph.addEdge(1, 2);
+    graph.addEdge(5, 4);
+    graph.addEdge(4, 6);
+    graph.addEdge(4, 2);
+    console.log(graph);
+    expect(graph.shortestDistance(2, 5)).to.equal(2);
   });
 });

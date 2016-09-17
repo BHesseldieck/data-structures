@@ -9,18 +9,18 @@ var LinkedList = function() {
       list.head = Node(value);
       list.tail = Node(value);
     } else {
+      var lastNode;
 
       var findLastNode = function(node) {
-      
         if (node.next !== null) {
           findLastNode(node.next);
         } else {
-          return node;
+          lastNode = node;
         } 
       };
 
-      var lastNode = findLastNode(list.head);
-
+      findLastNode(list.head);
+      
       lastNode.next = Node(value);
 
       list.tail = Node(value);
@@ -51,6 +51,20 @@ var LinkedList = function() {
 
   };
 
+  list.removeNode = function(value) {
+
+    var findNode = function(node) {
+      if (node.next === null) {
+        throw Error ('The value does not exist in the LinkedList');
+      } else if (node.next.value === value ) {
+        node.next = node.next.next;
+      } else {
+        findNode(node.next);
+      }
+    };
+    findNode(list.head); 
+  };
+
   return list;
 };
 
@@ -65,15 +79,16 @@ var Node = function(value) {
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ O(n) -- because worst case is recursing through the entire linked list
  */
 
 // list = {
 //   head: {
-//     value
+//     value 5
 //     next = {
-//       value
+//       value 6
 //       next = {
-//         value
+//         value 7
 //         next = null
 //       }
 //     }
