@@ -87,4 +87,32 @@ describe('graph', function() {
     graph.addEdge(4, 2);
     expect(graph.shortestDistance(2, 5)).to.equal(2);
   });
+
+  it ('should return the amount of nodes in the graph', function() {
+    graph.addNode(5);
+    graph.addNode(2);
+    graph.addNode(1);
+    graph.addNode(3);
+    graph.addNode(4);
+    graph.addNode(6);
+    expect(graph.nodeCount()).to.equal(6);
+  });
+
+  it('should visit every node with the depth-first approach', function() {
+    graph.addNode(1);
+    graph.addNode(2);
+    graph.addNode(3);
+    graph.addNode(4);
+    graph.addNode(5);
+    graph.addNode(6);
+    graph.addNode(7);
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 3);
+    graph.addEdge(1, 4);
+    graph.addEdge(2, 5);
+    graph.addEdge(2, 6);
+    graph.addEdge(6, 4);
+    graph.addEdge(3, 7);
+    expect(graph.depthFirstSearch(1)).to.eql([1, 2, 5, 6, 4, 3, 7]);
+  });
 });

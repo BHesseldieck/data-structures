@@ -3,10 +3,12 @@
 // Instantiate a new graph
 var Graph = function() {
   this.storage = {};
+  this.storage.count = 0;
 };
 
 // Add a node to the graph, passing in the node's value.
 Graph.prototype.addNode = function(node) {
+  this.storage.count++;
   this.storage[node] = [];
 };
 
@@ -52,7 +54,9 @@ Graph.prototype.removeEdge = function(fromNode, toNode) {
 // Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb) {
   for (var key in this.storage) {
-    cb(key);
+    if (key !== 'count') {
+      cb(key);
+    }
   }
 };
 
@@ -91,7 +95,27 @@ Graph.prototype.shortestDistance = function(fromNode, target) {
   return searchTree(this.storage[fromNode]);
 };
 
+Graph.prototype.depthFirstSearch = function(startNode) {
 
+  var graph = this;
+  var visited = [startNode];
+
+  var search = function(node) {
+    graph.storage[node].forEach(function(child) {
+      if (visited.includes(child) === false) {
+        visited.push(child);
+        search(child);
+      }
+    });
+  };
+  search(startNode);    
+
+  return visited;
+};
+
+Graph.prototype.nodeCount = function() {
+  return this.storage.count;
+};
 
 
 
