@@ -1,6 +1,7 @@
-var Tree = function(value) {
+var Tree = function(value, parent) {
   var newTree = Object.create(treeMethods);
   newTree.value = value;
+  newTree.parent = parent || null;
 
   newTree.children = [];  
   return newTree;
@@ -9,7 +10,7 @@ var Tree = function(value) {
 var treeMethods = {};
 
 treeMethods.addChild = function(value) {
-  this.children.push(Tree(value));
+  this.children.push(Tree(value, this));
 };
 
 treeMethods.contains = function(target) {
@@ -49,6 +50,39 @@ treeMethods.each = function(callback) {
   };
 
   eachNode(this);
+};
+
+
+treeMethods.findNode = function(target) {
+
+  var node;
+
+  var find = function(subNode) {
+    
+    if (subNode.value === target) {
+      node = subNode;
+    } else {
+      subNode.children.forEach(function(child) {
+        find(child);
+      }); 
+    }
+
+  };
+
+  find(this);
+
+  return node;
+
+};
+
+treeMethods.removeParent = function(value) {
+  var newRoot = this.findNode(value);
+
+  newRoot.parent.children = newRoot.parent.children.filter( child => child.value !== value);
+
+  newRoot.parent = null;
+
+  return newRoot;
 };
 
 
