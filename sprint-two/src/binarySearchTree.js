@@ -44,7 +44,7 @@ var binaryTreeMethods = {
   depthFirstLog: function(cb) {
 
     var lookUp = function(node) {
-      cb(node.value);
+      cb(node);
 
       if (node.left !== null) {
         lookUp(node.left);
