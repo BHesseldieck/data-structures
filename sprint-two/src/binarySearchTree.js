@@ -12,7 +12,14 @@ var binaryTreeMethods = {
   insert: function(val) {
 
     this.traverse(this, val);
-
+    var count = 0;
+    this.depthFirstLog(function(node) {
+      count++;
+    });
+    console.log(count, 'count');
+    if (count >= Math.pow(2, this.height(this)) - 1 ) {
+      this.rebalance();
+    }
   },
 
 
@@ -83,6 +90,21 @@ var binaryTreeMethods = {
       }
 
     }
+  },
+
+  height: function(node) {
+    if (!node) {
+      return false;
+    }
+
+    var leftHeight = node.height(node.left);
+    var rightHeight = node.height(node.right);
+    console.log(Math.max(leftHeight, rightHeight));
+    return Math.max(leftHeight, rightHeight);
+  },
+
+  rebalance: function() {
+    console.log('rebalance ran');
   }
 };
 
