@@ -4,25 +4,23 @@ var Queue = function() {
   this.length = 0;
 };
 
-Queue.prototype.size = function() {
-  return this.length;
-};
-
 Queue.prototype.enqueue = function(val) {
   this[this.length] = val;
   this.length++;
 };
 
 Queue.prototype.dequeue = function() {
+  var result = this[0];
+  for (var i = 1; i < this.length; i++) {
+    this[i - 1] = this[i];
+  }
   if (this.length > 0) {
     this.length--;
-  }
-  var result = this[0];
-  for (var i = 0; i < this.length; i++) {
-    this[this.length - 1] = this[this.length];
   }
   delete this[this.length];
   return result;
 };
 
-
+Queue.prototype.size = function() {
+  return this.length;
+};

@@ -3,7 +3,8 @@ var Tree = function(value, parent) {
   newTree.value = value;
   newTree.parent = parent || null;
 
-  newTree.children = [];  
+  newTree.children = [];
+
   return newTree;
 };
 
@@ -14,80 +15,58 @@ treeMethods.addChild = function(value) {
 };
 
 treeMethods.contains = function(target) {
-  var searchTree = function(node) {
-    var foundValue = false;
-
-    var search = function(subNode) {
-      
-      if (subNode.value === target) {
-        foundValue = true;
-      } else {
-        subNode.children.forEach(function(child) {
-          search(child);
-        }); 
-      }
-
-    };
-
-    search(node);
-
-    return foundValue;
-  };
-  
-  return searchTree(this);
-};
-
-
-treeMethods.each = function(callback) {
-
-  var eachNode = function eachNode(node) {
-    if (node.value !== undefined) {
-      callback(node);
+  var found = false;
+  var findTarget = function findTarget(node){
+    if (node.value === target) {
+      found = true;
+    } else if (node.children.length > 0) {
+      node.children.forEach( child => {
+        findTarget(child);
+      });
     }
-    node.children.forEach( child => {
-      eachNode(child);
-    });
   };
-
-  eachNode(this);
+  findTarget(this);
+  return found;
 };
 
+treeMethods.each = function treeEach (callback) {
+  var traverseTree = function traverseTree (node) {
+    callback(node);
+    if (node.children.length > 0) {
+      node.children.forEach( child => {
+        traverseTree(child);
+      });
+    }
+  };
+  traverseTree(this);
+};
 
 treeMethods.findNode = function(target) {
-
   var node;
-
-  var find = function(subNode) {
-    
+  var find = function(subNode) { 
     if (subNode.value === target) {
       node = subNode;
     } else {
       subNode.children.forEach(function(child) {
         find(child);
-      }); 
+      });
     }
-
   };
-
   find(this);
-
   return node;
-
 };
 
 treeMethods.removeParent = function(value) {
   var newRoot = this.findNode(value);
-
   newRoot.parent.children = newRoot.parent.children.filter( child => child.value !== value);
-
   newRoot.parent = null;
-
   return newRoot;
 };
 
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ * since we are traversing every branch is the complexity linear: O(n)
  */
 
 

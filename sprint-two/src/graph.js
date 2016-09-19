@@ -28,7 +28,7 @@ Graph.prototype.removeNode = function(node) {
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
 Graph.prototype.hasEdge = function(fromNode, toNode) {
-  return this.storage[fromNode].includes(toNode); 
+  return this.storage[fromNode].includes(toNode);
 };
 
 // Connects two nodes in a graph by adding an edge between them.
@@ -40,7 +40,7 @@ Graph.prototype.addEdge = function(fromNode, toNode) {
     }
 
     if ( (this.storage[toNode].indexOf(fromNode) === -1 ) ) {
-      this.storage[toNode].push(fromNode); 
+      this.storage[toNode].push(fromNode);
     }
   }
 };
@@ -79,7 +79,7 @@ Graph.prototype.shortestDistance = function(fromNode, target) {
           // console.log(child, 'child');
           visited.push(child);
           search(child, distance += 1);
-        }); 
+        });
       }
 
     };

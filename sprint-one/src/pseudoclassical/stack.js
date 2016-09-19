@@ -4,24 +4,20 @@ var Stack = function() {
   this.counter = 0;
 };
 
-Stack.prototype.size = function () {
-  return this.counter;
-};
-
-Stack.prototype.push = function (val) {
-  this[this.counter] = val;
+Stack.prototype.push = function(value) {
+  this[this.counter] = value;
   this.counter++;
 };
 
-Stack.prototype.pop = function () {
+Stack.prototype.pop = function() {
   if (this.counter > 0) {
     this.counter--;
   }
-
-  var result = this[this.counter];
-
+  var topItem = this[this.counter];
   delete this[this.counter];
-
-  return result;
+  return topItem;
 };
 
+Stack.prototype.size = function() {
+  return this.counter;
+};
