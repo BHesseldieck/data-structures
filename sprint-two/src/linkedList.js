@@ -4,28 +4,21 @@ var LinkedList = function() {
   list.tail = null;
 
   list.addToTail = function(value) {
-    
     if (list.head === null && list.tail === null) {
       list.head = Node(value);
       list.tail = Node(value);
     } else {
-      var lastNode;
-
-      var findLastNode = function(node) {
-        if (node.next !== null) {
-          findLastNode(node.next);
+      var addToLastNode = function addToLastNode(node){
+        if(node.next === null){
+          node.next = Node(value);
         } else {
-          lastNode = node;
-        } 
+          addToLastNode(node.next);
+        }
       };
-
-      findLastNode(list.head);
-      
-      lastNode.next = Node(value);
-
+      addToLastNode(list.head);
       list.tail = Node(value);
-
     }
+
   };
 
   list.removeHead = function() {
@@ -35,34 +28,35 @@ var LinkedList = function() {
   };
 
   list.contains = function(target) {
-    var searchNodes = function(node) {
-      if (node.value === target) {
-        return true;
-      } else if (node.next !== null) {
-        return searchNodes(node.next);
+    var found = false;
+    var findTarget = function findTarget (listItem) {
+      if(listItem.value === target) {
+        found = true;
+      } else if (listItem.next !== null) {
+        findTarget(listItem.next);
       }
-
-      return false;
     };
-
-
-    var result = searchNodes(list.head);
-    return result;
-
+    findTarget(list.head);
+    return found;
   };
 
-  list.removeNode = function(value) {
+  list.removeNode = function(val) {
 
-    var findNode = function(node) {
-      if (node.next === null) {
-        throw Error ('The value does not exist in the LinkedList');
-      } else if (node.next.value === value ) {
-        node.next = node.next.next;
-      } else {
+    var findNode = function findNode(node) {
+      if(node.next.value === val) {
+        if (node.next.next === null) {
+          node.next = null;
+          list.tail = node;
+        } else {
+          node.next = node.next.next;
+        }
+      } else if (node.next !== null) {
         findNode(node.next);
+      } else {
+        throw new Error ('Value does not exist in List');
       }
     };
-    findNode(list.head); 
+    findNode(list.head);
   };
 
   return list;
@@ -77,27 +71,27 @@ var Node = function(value) {
   return node;
 };
 
-/*
- * Complexity: What is the time complexity of the above functions?
- O(n) -- because worst case is recursing through the entire linked list
- */
+// /*
+//  * Complexity: What is the time complexity of the above functions?
+//  O(n) -- because worst case is recursing through the entire linked list
+//  */
 
-// list = {
-//   head: {
-//     value 5
-//     next = {
-//       value 6
-//       next = {
-//         value 7
-//         next = null
-//       }
-//     }
-//   }
-//   tail: {
-//     value
-//     next = null
-//   }
-// }
+// // list = {
+// //   head: {
+// //     value 5
+// //     next = {
+// //       value 6
+// //       next = {
+// //         value 7
+// //         next = null
+// //       }
+// //     }
+// //   }
+// //   tail: {
+// //     value
+// //     next = null
+// //   }
+// // }
 
 
 
